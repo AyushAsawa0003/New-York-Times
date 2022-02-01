@@ -15,6 +15,34 @@ go to New York Times website for specific story
 */
 
 function Stories({story}) {
+  //State to count the number of click
+  const [clickCount, setClickCount] = useState(0);
+
+  //for setting task is completed to default as false
+  const [completed, setCompleted] = useState(false);
+
+  //Function to count the click on '+'
+  const countClick = () => {
+    if (clickCount === 0) {
+      setClickCount(1);
+      setTimeout(() => clearCount(), 300); //After 100ms, the count will reset automatically
+    } else if (clickCount === 1) {
+      setCompleted(!completed);
+      clearCount();
+    }
+  };
+
+  //Clear the Click count
+  const clearCount = () => {
+    setClickCount(0);
+  };
+
+  //object to set color of text to highlight the news is read
+  const colorChange = {
+    color: completed ? '#bdad04' : 'grey',
+  };
+
+  //Function to get Image
   const getImage = () => {
     if (story.multimedia !== null) {
       return story.multimedia[0].url;
@@ -27,7 +55,8 @@ function Stories({story}) {
     <View style={styles.container}>
       <Text style={styles.title}>{story.title}</Text>
       <Image style={styles.img} source={{uri: getImage()}} />
-      <Text style={styles.abstract}>{story.abstract}</Text>
+      <Text onPress={() => countClick()} style={(styles.abstract, colorChange)}>
+        {story.abstract}
       <TouchableOpacity>
         <Text
           style={styles.url}
